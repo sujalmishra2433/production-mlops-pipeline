@@ -29,6 +29,7 @@ data/reference/*.csv
 reports/*.png
 reports/*.html
 reports/*.json
+reports/*.jsonl
 !reports/.gitkeep
 
 # Environment variables & local secrets
