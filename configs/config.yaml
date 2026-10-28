@@ -1,0 +1,65 @@
+project:
+  name: "mlops_platform"
+  version: "0.1.0"
+  random_seed: 42
+
+data:
+  raw_data_path: "data/raw/customer_churn.csv"
+  processed_dir: "data/processed"
+  reference_data_path: "data/reference/reference_features.parquet"
+  target_column: "churn"
+  id_column: "customer_id"
+  test_size: 0.15
+  val_size: 0.15
+  random_state: 42
+  features:
+    numerical:
+      - "tenure"
+      - "monthly_charges"
+      - "total_charges"
+    categorical:
+      - "contract_type"
+      - "payment_method"
+      - "internet_service"
+      - "tech_support"
+      - "online_security"
+      - "paperless_billing"
+
+mlflow:
+  tracking_uri: "sqlite:///mlflow.db"
+  experiment_name: "customer_churn_prediction"
+  model_registry_name: "customer_churn_classifier"
+  champion_alias: "champion"
+
+training:
+  baseline_model: "logistic_regression"
+  candidate_models:
+    - "logistic_regression"
+    - "random_forest"
+  selection_metric: "f1_score"
+  random_state: 42
+  logistic_regression:
+    C: 1.0
+    max_iter: 1000
+    solver: "lbfgs"
+  random_forest:
+    n_estimators: 100
+    max_depth: 8
+    min_samples_split: 5
+    random_state: 42
+
+quality_gate:
+  min_roc_auc: 0.70
+  min_f1_score: 0.60
+  max_inference_latency_ms: 50.0
+  must_beat_baseline: true
+
+monitoring:
+  drift_p_value_threshold: 0.05
+  drift_share_threshold: 0.30
+  psi_threshold: 0.20
+  prediction_log_path: "reports/prediction_traffic.jsonl"
+  drift_report_path: "reports/drift_report.json"
+  validation_report_path: "reports/validation_report.json"
+  evaluation_report_path: "reports/evaluation_metrics.json"
+  confusion_matrix_path: "reports/confusion_matrix.png"

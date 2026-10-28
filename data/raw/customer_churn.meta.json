@@ -1,0 +1,34 @@
+{
+  "source": "synthetic_deterministic",
+  "n_rows": 5000,
+  "n_columns": 11,
+  "columns": [
+    "customer_id",
+    "tenure",
+    "monthly_charges",
+    "total_charges",
+    "contract_type",
+    "payment_method",
+    "internet_service",
+    "tech_support",
+    "online_security",
+    "paperless_billing",
+    "churn"
+  ],
+  "dtypes": {
+    "customer_id": "object",
+    "tenure": "int64",
+    "monthly_charges": "float64",
+    "total_charges": "float64",
+    "contract_type": "object",
+    "payment_method": "object",
+    "internet_service": "object",
+    "tech_support": "object",
+    "online_security": "object",
+    "paperless_billing": "object",
+    "churn": "int64"
+  },
+  "fingerprint_sha256": "703d4ba154124fdebbe8f300b84387115464db4bd22130d6faf6d20fca983d0e",
+  "saved_path": "C:\\Users\\sujal\\OneDrive\\Desktop\\github work\\AI growth & agentic commerce\\mlops\\data\\raw\\customer_churn.csv",
+  "created_at_utc": "2026-10-26T17:20:51.215363+00:00"
+}

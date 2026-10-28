@@ -1,0 +1,45 @@
+stages:
+  ingest:
+    cmd: python scripts/generate_sample_data.py --samples 5000 --seed 42 --output data/raw/customer_churn.csv
+    deps:
+      - scripts/generate_sample_data.py
+      - src/mlops_platform/data/ingestion.py
+    params:
+      - project.seed
+      - data.n_samples
+    outs:
+      - data/raw/customer_churn.csv
+
+  validate:
+    cmd: python -c "import pandas as pd; from mlops_platform.data.validation import validate_dataset; validate_dataset(pd.read_csv('data/raw/customer_churn.csv'), include_target=True, report_path='reports/validation_report.json')"
+    deps:
+      - data/raw/customer_churn.csv
+      - src/mlops_platform/data/validation.py
+    outs:
+      - reports/validation_report.json:
+          cache: false
+
+  train_and_evaluate:
+    cmd: python scripts/run_pipeline.py --config configs/config.yaml
+    deps:
+      - data/raw/customer_churn.csv
+      - src/mlops_platform/data/preprocessing.py
+      - src/mlops_platform/features/build_features.py
+      - src/mlops_platform/training/train.py
+      - src/mlops_platform/training/evaluate.py
+      - src/mlops_platform/registry/register_model.py
+    params:
+      - train.selection_metric
+      - quality_gate.min_roc_auc
+      - quality_gate.min_f1_score
+    outs:
+      - data/processed/train.parquet
+      - data/processed/val.parquet
+      - data/processed/test.parquet
+      - data/reference/reference_features.parquet
+      - reports/evaluation_metrics.json:
+          cache: false
+      - reports/confusion_matrix.png:
+          cache: false
+      - reports/champion_metadata.json:
+          cache: false

@@ -1,0 +1,29 @@
+project:
+  seed: 42
+
+data:
+  raw_path: "data/raw/customer_churn.csv"
+  processed_dir: "data/processed"
+  reference_path: "data/reference/reference_features.parquet"
+  n_samples: 5000
+  test_size: 0.15
+  val_size: 0.15
+
+train:
+  selection_metric: "f1_score"
+  logistic_regression:
+    C: 1.0
+    max_iter: 1000
+  random_forest:
+    n_estimators: 100
+    max_depth: 8
+    min_samples_split: 5
+
+quality_gate:
+  min_roc_auc: 0.70
+  min_f1_score: 0.60
+  max_latency_ms: 50.0
+
+monitoring:
+  drift_p_value_threshold: 0.05
+  drift_share_threshold: 0.30
